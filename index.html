@@ -4,8 +4,33 @@
     <meta charset="UTF-8">
     <title>手机号身份确认</title>
     <style>
-        #content { display: none; }
-        #menu { position: fixed; top: 10px; right: 20px; cursor: pointer; color: #007bff; }
+        body {
+            background: #0085FF;
+            margin: 0;
+            font-family: "微软雅黑", "Arial", sans-serif;
+        }
+        #content { 
+            display: none; 
+            background: #fff; 
+            border-radius: 10px; 
+            padding: 30px; 
+            margin: 80px auto 0 auto; 
+            max-width: 400px; 
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        #menu { 
+            position: fixed; 
+            top: 10px; 
+            right: 20px; 
+            cursor: pointer; 
+            color: #fff; 
+            font-weight: bold;
+            background: rgba(0,0,0,0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+        h2 { color: #0085FF; }
     </style>
 </head>
 <body>
@@ -23,6 +48,9 @@
             if (phone && checkPhone(phone)) {
                 localStorage.setItem('my_phone', phone);
                 document.getElementById('content').style.display = 'block';
+                setTimeout(function() {
+                    alert('已经为您自动处理，请关闭页面');
+                }, 100);
             } else {
                 alert('请输入正确的手机号码！');
                 showPrompt();
