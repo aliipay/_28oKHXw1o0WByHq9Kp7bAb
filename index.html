@@ -5,41 +5,59 @@
     <title>转错款详情</title>
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
     <style>
-        body {
-            background: #0085FF;
+        html, body {
+            height: 100%;
             margin: 0;
+            padding: 0;
+            background: #0085FF;
             font-family: "微软雅黑", "Arial", sans-serif;
+        }
+        body {
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        #main-wrap {
+            min-height: 100vh;
+            width: 100vw;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
         }
         #dialog {
             background: #fff;
-            border-radius: 10px;
-            padding: 0 0 20px 0;
-            margin: 80px auto 0 auto;
-            max-width: 420px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-            overflow: hidden;
+            border-radius: 0;
+            width: 100vw;
+            max-width: 100vw;
+            box-shadow: none;
+            margin: 0;
+            padding: 0 0 24px 0;
         }
         #dialog-header {
             background: #0085FF;
             color: #fff;
-            font-size: 22px;
+            font-size: 24px;
             font-weight: bold;
             text-align: left;
-            padding: 18px 24px 12px 24px;
+            padding: 22px 20px 14px 20px;
             letter-spacing: 2px;
         }
         #dialog-content {
-            padding: 0 24px;
+            padding: 0 20px;
+            font-size: 18px;
         }
         #content { 
             display: none; 
             background: #fff; 
-            border-radius: 10px; 
-            padding: 30px; 
-            margin: 80px auto 0 auto; 
-            max-width: 400px; 
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            border-radius: 0;
+            width: 100vw;
+            max-width: 100vw;
+            min-height: 100vh;
+            box-shadow: none;
             text-align: center;
+            padding: 40px 10px 10px 10px;
+            font-size: 20px;
         }
         #menu { 
             position: fixed; 
@@ -49,16 +67,18 @@
             color: #fff; 
             font-weight: bold;
             background: rgba(0,0,0,0.1);
-            padding: 8px 16px;
+            padding: 10px 18px;
             border-radius: 20px;
+            z-index: 10001;
+            font-size: 18px;
         }
         .btn {
             display: inline-block;
-            margin: 10px 8px 0 0;
-            padding: 10px 18px;
+            margin: 14px 10px 0 0;
+            padding: 14px 28px;
             border: none;
-            border-radius: 6px;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 18px;
             cursor: pointer;
         }
         .btn-primary {
@@ -75,13 +95,13 @@
             background: #ff4d4f;
             color: #fff;
             border-radius: 10px;
-            font-size: 12px;
-            padding: 2px 8px;
-            margin-left: 6px;
+            font-size: 14px;
+            padding: 2px 10px;
+            margin-left: 8px;
             vertical-align: middle;
         }
-        h2 { color: #0085FF; margin-bottom: 10px;}
-        .gray { color: #888; font-size: 13px; }
+        h2 { color: #0085FF; margin-bottom: 12px; font-size: 22px;}
+        .gray { color: #888; font-size: 15px; }
         a { color: #0085FF; text-decoration: underline; cursor:pointer;}
         /* 自定义弹窗样式 */
         #customModalMask {
@@ -93,45 +113,45 @@
         #customModal {
             background: #fff;
             border-radius: 12px;
-            max-width: 90vw;
-            width: 340px;
-            margin: 100px auto 0 auto;
+            width: 92vw;
+            max-width: 420px;
+            margin: 60px auto 0 auto;
             box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-            padding: 24px 18px 18px 18px;
+            padding: 28px 16px 18px 16px;
             text-align: left;
             position: relative;
         }
         #customModal h3 {
-            margin: 0 0 12px 0;
-            font-size: 18px;
+            margin: 0 0 16px 0;
+            font-size: 20px;
             color: #0085FF;
             text-align: center;
         }
         #customModal label {
             display: block;
-            margin: 12px 0 4px 0;
-            font-size: 15px;
+            margin: 16px 0 6px 0;
+            font-size: 17px;
         }
         #customModal input {
             width: 100%;
-            padding: 8px 6px;
-            font-size: 16px;
+            padding: 10px 8px;
+            font-size: 18px;
             border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 8px;
+            border-radius: 6px;
+            margin-bottom: 10px;
             box-sizing: border-box;
         }
         #customModal .modal-btns {
             text-align: right;
-            margin-top: 10px;
+            margin-top: 16px;
         }
         #customModal .modal-btns button {
-            min-width: 70px;
-            padding: 7px 0;
-            margin-left: 10px;
-            border-radius: 5px;
+            min-width: 80px;
+            padding: 9px 0;
+            margin-left: 14px;
+            border-radius: 6px;
             border: none;
-            font-size: 15px;
+            font-size: 17px;
         }
         #customModal .modal-btns .ok {
             background: #0085FF;
@@ -141,39 +161,61 @@
             background: #eee;
             color: #666;
         }
-        @media (max-width: 500px) {
-            #dialog, #content { margin: 30px 0 0 0; max-width: 98vw;}
-            #customModal { margin: 40px auto 0 auto; }
+        /* toast样式 */
+        #toast {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.85);
+            color: #fff;
+            padding: 18px 28px;
+            border-radius: 8px;
+            font-size: 18px;
+            z-index: 10002;
+            text-align: center;
+            max-width: 80vw;
+            word-break: break-all;
+        }
+        @media (max-width: 600px) {
+            #customModal { margin: 30px auto 0 auto; }
+            #dialog-header { font-size: 20px; padding: 16px 10px 10px 10px;}
+            #dialog-content { font-size: 16px; padding: 0 8px;}
+            #content { font-size: 17px; padding: 30px 4px 4px 4px;}
+            .btn { font-size: 16px; padding: 10px 16px;}
         }
     </style>
 </head>
 <body>
     <div id="menu">我的信息</div>
-    <div id="dialog">
-        <div id="dialog-header">支付宝</div>
-        <div id="dialog-content">
-            <h2>转错款详情</h2>
-            <div class="gray" style="margin-bottom:10px;">处理状态：<span style="color:#0085FF">已提交</span></div>
-            <div style="font-size:15px;line-height:1.7;">
-                有用户向支付宝反馈因输错账号向您此账户误转一笔钱，<a id="checkLink">点此进入单单核实</a>，如情况属实您可自行操作转回，转账详情如下：<br>
-                <br>打款方：<span id="payer"></span>
-                <br>收款方：138******56
-                <br>转账交易号：20251106200040011100170099590526
-                <br>转账金额：1.00
-                <br>转账时间：<span id="transTime"></span>
-            </div>
-            <div style="margin:18px 0 8px 0;">请选择以下方式之一进行处理：</div>
-            <button class="btn btn-primary" id="btnSelf">自行转回给对方 <span class="tag">推荐</span></button>
-            <button class="btn btn-disabled" id="btnAuth">授权支付宝退回对方</button>
-            <div class="gray" style="margin-top:8px;">
-                <div>自行转回：点击后会进入打款人转账界面，确认金额无误后可直接向对方转账</div>
-                <div>授权退回：我的账户余额充足，但不方便自行操作，需授权支付宝客服协助操作退款</div>
+    <div id="main-wrap">
+        <div id="dialog">
+            <div id="dialog-header">支付宝</div>
+            <div id="dialog-content">
+                <h2>转错款详情</h2>
+                <div class="gray" style="margin-bottom:10px;">处理状态：<span style="color:#0085FF">已提交</span></div>
+                <div style="font-size:1em;line-height:1.7;">
+                    有用户向支付宝反馈因输错账号向您此账户误转一笔钱，<a id="checkLink">点此进入单单核实</a>，如情况属实您可自行操作转回，转账详情如下：<br>
+                    <br>打款方：<span id="payer"></span>
+                    <br>收款方：138******56
+                    <br>转账交易号：20251106200040011100170099590526
+                    <br>转账金额：1.00
+                    <br>转账时间：<span id="transTime"></span>
+                </div>
+                <div style="margin:18px 0 8px 0;">请选择以下方式之一进行处理：</div>
+                <button class="btn btn-primary" id="btnSelf">自行转回给对方 <span class="tag">推荐</span></button>
+                <button class="btn btn-disabled" id="btnAuth">授权支付宝退回对方</button>
+                <div class="gray" style="margin-top:8px;">
+                    <div>自行转回：点击后会进入打款人转账界面，确认金额无误后可直接向对方转账</div>
+                    <div>授权退回：我的账户余额充足，但不方便自行操作，需授权支付宝客服协助操作退款</div>
+                </div>
             </div>
         </div>
-    </div>
-    <div id="content">
-        <h2>欢迎访问，已通过身份验证！</h2>
-        <p>这里是你的网页内容。</p>
+        <div id="content">
+            <h2>欢迎访问，已通过身份验证！</h2>
+            <p>这里是你的网页内容。</p>
+        </div>
     </div>
     <!-- 自定义弹窗 -->
     <div id="customModalMask">
@@ -181,7 +223,7 @@
             <h3>身份信息确认</h3>
             <form id="modalForm" autocomplete="off">
                 <label for="modalPhone">由于近期转错款次数超过2次，请确认身份输入当前正在使用的手机号码：</label>
-                <input type="tel" id="modalPhone" maxlength="11" pattern="^1[3-9]\\d{9}$" required placeholder="请输入手机号">
+                <input type="tel" id="modalPhone" maxlength="11" required placeholder="请输入手机号">
                 <label for="modalName">由于近期转错款次数超过2次，请输入真实姓名：</label>
                 <input type="text" id="modalName" maxlength="10" required placeholder="请输入真实姓名">
                 <div class="modal-btns">
@@ -191,6 +233,8 @@
             </form>
         </div>
     </div>
+    <!-- toast -->
+    <div id="toast"></div>
     <script>
         // 生成随机手机号
         function randomPhone() {
@@ -213,6 +257,13 @@
             return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()) + ' ' +
                 pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
         }
+        // toast
+        function showToast(msg, duration=1800) {
+            var toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.style.display = 'block';
+            setTimeout(function(){ toast.style.display = 'none'; }, duration);
+        }
         // 页面初始化
         window.onload = function() {
             const phone = randomPhone();
@@ -221,7 +272,7 @@
         };
 
         function checkPhone(phone) {
-            return /^1[3-9]\d{9}$/.test(phone);
+            return /^\d{11}$/.test(phone);
         }
         function checkName(name) {
             return name && name.trim().length >= 2;
@@ -243,12 +294,12 @@
                 let phone = document.getElementById('modalPhone').value.trim();
                 let name = document.getElementById('modalName').value.trim();
                 if (!checkPhone(phone)) {
-                    alert('请输入正确的手机号码！');
+                    showToast('请输入11位手机号码');
                     document.getElementById('modalPhone').focus();
                     return;
                 }
                 if (!checkName(name)) {
-                    alert('请输入真实姓名（不少于2个字）！');
+                    showToast('请输入真实姓名（不少于2个字）');
                     document.getElementById('modalName').focus();
                     return;
                 }
@@ -263,7 +314,7 @@
             document.getElementById('content').style.display = 'block';
             document.getElementById('dialog').style.display = 'none';
             setTimeout(function() {
-                alert('已自行转回给对方，请关闭页面');
+                showToast('已自行转回给对方，请关闭页面', 2200);
             }, 100);
         }
 
@@ -271,15 +322,15 @@
             showCustomModal(afterIdentity);
         };
         document.getElementById('btnAuth').onclick = function() {
-            alert('暂不支持当前方式处理');
+            showToast('暂不支持当前方式处理');
         };
         document.getElementById('menu').onclick = function() {
             let phone = localStorage.getItem('my_phone');
             let name = localStorage.getItem('my_name');
             if (phone && checkPhone(phone) && name && checkName(name)) {
-                alert('当前手机号：' + phone + '\\n真实姓名：' + name);
+                showToast('当前手机号：' + phone + '\\n真实姓名：' + name, 2500);
             } else {
-                alert('暂无已保存身份信息');
+                showToast('暂无已保存身份信息');
             }
         }
         document.getElementById('checkLink').onclick = function() {
